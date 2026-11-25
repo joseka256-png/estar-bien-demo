@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo WhatsApp · Estar Bien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#1F2F6B;--sky:#4CB8E6;--ground:#E8F0FB;--text2:#3A4A7A;--line:#C9D7EE;--wa:#0B6B5B;--wa-bg:#EFE7DD;--out:#D9FDD3}
+  *{box-sizing:border-box;min-width:0}
+  body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--ground);color:var(--navy)}
+  .demo-bar{background:var(--navy);color:#fff;font-size:13px;text-align:center;padding:8px 12px}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 40px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;justify-content:center}
+  .intro{flex:1 1 300px;max-width:380px}
+  .intro h1{font-size:clamp(28px,4vw,40px);line-height:1.1;margin:8px 0 12px;font-weight:800}
+  .intro p{color:var(--text2);font-size:16px;line-height:1.5;margin:0 0 14px}
+  .intro ol{padding-left:20px;color:var(--text2);line-height:1.6;margin:0}
+  /* phone */
+  .phone{flex:0 0 380px;max-width:100%;height:720px;background:#111;border-radius:40px;padding:12px;box-shadow:0 20px 50px rgba(31,47,107,.25)}
+  .screen{height:100%;border-radius:30px;overflow:hidden;display:flex;flex-direction:column;background:var(--wa-bg)}
+  .wa-head{background:var(--wa);color:#fff;display:flex;align-items:center;gap:10px;padding:14px 14px 12px}
+  .wa-av{width:40px;height:40px;border-radius:20px;background:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .wa-av img{width:120%;height:auto}
+  .wa-name{font-weight:700;font-size:15px}
+  .wa-sub{font-size:12px;opacity:.85}
+  .wa-msgs{flex:1;overflow-y:auto;padding:12px 10px;display:flex;flex-direction:column;gap:6px}
+  .day{align-self:center;background:#fff;color:#54656F;font-size:12px;padding:4px 10px;border-radius:8px;margin-bottom:4px}
+  .note{align-self:center;background:#FFF3C4;color:#54656F;font-size:12px;padding:6px 10px;border-radius:8px;text-align:center;max-width:90%}
+  .m{max-width:82%;padding:7px 9px 18px;border-radius:10px;font-size:14.5px;line-height:1.4;white-space:pre-wrap;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+  .m .t{position:absolute;right:8px;bottom:3px;font-size:11px;color:#667781}
+  .in{background:#fff;align-self:flex-start;border-top-left-radius:2px}
+  .out{background:var(--out);align-self:flex-end;border-top-right-radius:2px}
+  .who{display:block;font-size:12px;font-weight:700;color:#0B6B5B;margin-bottom:2px}
+  .typing{color:#667781;font-style:italic}
+  .quick{display:flex;gap:6px;overflow-x:auto;padding:6px 10px;background:var(--wa-bg)}
+  .quick button{flex:none;border:1px solid #cfd8dc;background:#fff;color:#0B6B5B;border-radius:999px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer}
+  form{display:flex;gap:8px;padding:8px 10px 12px;background:var(--wa-bg)}
+  form input{flex:1;border:0;border-radius:22px;padding:12px 16px;font:inherit;font-size:16px;background:#fff;color:#111}
+  form button{width:46px;height:46px;border-radius:23px;border:0;background:var(--wa);color:#fff;cursor:pointer;font-size:18px}
+  form button:disabled{opacity:.5}
+  /* reception panel */
+  .panel{flex:1 1 300px;max-width:380px;background:#fff;border-radius:20px;padding:22px;border:1px solid var(--line)}
+  .panel h2{margin:0 0 4px;font-size:20px}
+  .panel .s{color:var(--text2);font-size:14px;margin:0 0 16px}
+  .empty{color:var(--text2);font-size:14px;border:1px dashed var(--line);border-radius:14px;padding:18px;text-align:center}
+  .lead{border:2px solid var(--sky);border-radius:14px;padding:16px;display:grid;gap:8px}
+  .lead .badge{justify-self:start;background:var(--navy);color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
+  .row{display:grid;grid-template-columns:110px 1fr;gap:8px;font-size:15px}
+  .row b{color:var(--text2);font-weight:600}
+  .lead button{margin-top:6px;background:var(--wa);color:#fff;border:0;border-radius:12px;padding:12px;font:inherit;font-weight:700;cursor:pointer;min-height:44px}
+  .lead button:disabled{background:#9bb;cursor:default}
+  @media (max-width:420px){.phone{flex-basis:100%;height:640px;border-radius:0;padding:0;background:none;box-shadow:none}.screen{border-radius:16px}}
+</style>
+</head>
+<body>
+<div class="demo-bar">Simulación de WhatsApp preparada por ISCR Tech · los precios son datos de ejemplo</div>
+<div class="wrap">
+  <section class="intro">
+    <h1>Así atendería el asistente en WhatsApp</h1>
+    <p>El paciente escribe al número de la clínica. El asistente responde al instante y, cuando el paciente quiere cita, pasa la conversación a la recepción en el mismo chat.</p>
+    <ol>
+      <li>Pregunte por especialidades, horarios o precios.</li>
+      <li>Pruebe pedir un medicamento: no da consejo médico.</li>
+      <li>Pida una cita y dé sus datos: aparecen en el panel de recepción.</li>
+    </ol>
+  </section>
+
+  <section class="phone" aria-label="Simulación de chat de WhatsApp">
+    <div class="screen">
+      <div class="wa-head">
+        <div class="wa-av"><img src="logo.png" alt=""></div>
+        <div><div class="wa-name">Centro Médico Estar Bien</div><div class="wa-sub">Cuenta de empresa · en línea</div></div>
+      </div>
+      <div class="wa-msgs" id="msgs" aria-live="polite">
+        <div class="day">Hoy</div>
+      </div>
+      <div class="quick" id="quick">
+        <button type="button">Hola, ¿qué especialidades tienen?</button>
+        <button type="button">¿A qué hora abren?</button>
+        <button type="button">Tengo presión alta, ¿qué pastilla tomo?</button>
+        <button type="button">Quiero una cita con cardiología</button>
+      </div>
+      <form id="form">
+        <label for="inp" style="position:absolute;left:-9999px">Mensaje</label>
+        <input id="inp" autocomplete="off" placeholder="Mensaje">
+        <button id="send" type="submit" aria-label="Enviar">➤</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="Panel de recepción">
+    <h2>Panel de recepción</h2>
+    <p class="s">Lo que ve el personal cuando el asistente pasa un paciente.</p>
+    <div id="leads"><div class="empty">Todavía no hay pacientes esperando cita.</div></div>
+  </section>
+</div>
+
+<script>
+{
+  const WORKER_URL = 'https://estarbien-agente.iscrtech-apps.workers.dev/chat';
+  const CANAL = '(Contexto del sistema, no lo menciones: esta conversación es por WhatsApp. Cuando ya tengas nombre, teléfono, especialidad y motivo, di que una persona de la recepción continúa en este mismo chat en unos minutos para confirmar la cita, sin mencionar botones, e incluye el bloque LEAD.)\n\n';
+  const msgs = document.getElementById('msgs'), form = document.getElementById('form'), inp = document.getElementById('inp'), send = document.getElementById('send'), leads = document.getElementById('leads');
+  const history = [];
+  let busy = false, handedOff = false;
+
+  const hora = () => new Date().toLocaleTimeString('es-CR', { hour: 'numeric', minute: '2-digit' });
+  function bubble(cls, text, who) {
+    const d = document.createElement('div');
+    d.className = 'm ' + cls;
+    if (who) { const w = document.createElement('span'); w.className = 'who'; w.textContent = who; d.appendChild(w); }
+    const body = document.createElement('span'); body.textContent = text; d.appendChild(body);
+    const t = document.createElement('span'); t.className = 't'; t.textContent = hora() + (cls === 'out' ? ' ✓✓' : ''); d.appendChild(t);
+    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+    return body;
+  }
+  function note(text) {
+    const n = document.createElement('div'); n.className = 'note'; n.textContent = text;
+    msgs.appendChild(n); msgs.scrollTop = msgs.scrollHeight;
+  }
+  function showLead(d) {
+    leads.innerHTML = '';
+    const card = document.createElement('div'); card.className = 'lead';
+    const badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = 'Nuevo · espera confirmación';
+    card.appendChild(badge);
+    [['Nombre', d.nombre], ['Teléfono', d.telefono], ['Especialidad', d.especialidad], ['Motivo', d.motivo]].forEach(([k, v]) => {
+      const r = document.createElement('div'); r.className = 'row';
+      const b = document.createElement('b'); b.textContent = k; const s = document.createElement('span'); s.textContent = v || '—';
+      r.append(b, s); card.appendChild(r);
+    });
+    const btn = document.createElement('button'); btn.type = 'button'; btn.textContent = 'Tomar la conversación';
+    btn.addEventListener('click', () => {
+      btn.disabled = true; btn.textContent = 'Atendido por la recepción';
+      badge.textContent = 'En atención';
+      note('La recepción se unió a la conversación');
+      const nombre = (d.nombre || '').split(' ')[0];
+      bubble('in', `Hola ${nombre}, le saluda la recepción de Estar Bien. Ya tengo sus datos para ${d.especialidad || 'la consulta'}. ¿Qué día y hora le queda mejor?`, 'Recepción');
+    });
+    card.appendChild(btn);
+    leads.appendChild(card);
+  }
+
+  async function ask(text) {
+    if (busy || !text.trim()) return;
+    busy = true; send.disabled = true;
+    bubble('out', text);
+    if (handedOff) { note('Este mensaje lo recibe la recepción'); busy = false; send.disabled = false; return; }
+    history.push({ role: 'user', content: text });
+    const out = bubble('in', 'escribiendo…', 'Asistente virtual');
+    out.classList.add('typing');
+    try {
+      const payload = history.map((m, i) => i === 0 ? { role: m.role, content: CANAL + m.content } : m);
+      const r = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: payload }) });
+      const data = await r.json();
+      const answer = (data && data.reply) || 'No pude responder en este momento. Intente de nuevo.';
+      out.classList.remove('typing'); out.textContent = answer;
+      history.push({ role: 'assistant', content: answer });
+      if (data && data.lead) {
+        handedOff = true;
+        note('El asistente pasó la conversación a la recepción');
+        showLead(data.lead);
+      }
+    } catch (e) {
+      out.classList.remove('typing'); out.textContent = 'No pude conectarme en este momento. Intente de nuevo.';
+      history.pop();
+    }
+    msgs.scrollTop = msgs.scrollHeight;
+    busy = false; send.disabled = false; inp.focus();
+  }
+
+  bubble('in', '¡Hola! Gracias por escribir al Centro Médico Estar Bien. Soy el asistente virtual: le ayudo con especialidades, horarios, precios o a coordinar su cita. ¿En qué le ayudo?', 'Asistente virtual');
+  form.addEventListener('submit', (e) => { e.preventDefault(); const t = inp.value; inp.value = ''; ask(t); });
+  document.getElementById('quick').addEventListener('click', (e) => { if (e.target.tagName === 'BUTTON') ask(e.target.textContent); });
+}
+</script>
+</body>
+</html>
